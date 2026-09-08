@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/*
+ * Brand tokens — the single source of truth is docs/DESIGN_SYSTEM.md.
+ * Declared through Tailwind's @theme so the same values are available both as
+ * utilities (text-ivory, bg-ground) and as custom properties (var(--color-ivory)).
+ */
+@theme {
+  --color-ground: #000000;
+  --color-ivory: #f0ede6;
+  --color-burgundy: #6e1f1f;
+  --color-muted: #8f8a82;
+  --color-surface-1: #0b0b0b;
+  --color-surface-2: #111111;
+  --color-surface-3: #151515;
+  --color-hairline: rgb(240 237 230 / 0.1);
+
+  --font-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Motion — fewer moves, longer eases, nothing bouncy. */
+  --ease-authored: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-settle: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@layer base {
+  html {
+    background-color: var(--color-ground);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    height: 100dvh;
+    margin: 0;
+    background-color: var(--color-ground);
+    color: var(--color-ivory);
+    font-family: var(--font-mono);
+    font-weight: 400;
+    /* One viewport, no accidental scroll in either axis. */
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-burgundy);
+    color: var(--color-ivory);
+  }
+
+  :focus-visible {
+    outline: 1px solid rgb(240 237 230 / 0.7);
+    outline-offset: 6px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}

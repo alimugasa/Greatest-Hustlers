@@ -1,0 +1,177 @@
+.root {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 12rem;
+  height: 1.5em;
+  pointer-events: auto;
+}
+
+/* Label and field occupy the same cell, so nothing in the footer shifts. */
+.toggle,
+.form {
+  grid-area: 1 / 1;
+  transition:
+    opacity 380ms var(--ease-authored),
+    transform 380ms var(--ease-authored),
+    visibility 0s linear 380ms;
+}
+
+.root[data-open] .form,
+.root:not([data-open]) .toggle {
+  transition-delay: 0s;
+}
+
+.toggle {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0.5rem 0.75rem;
+  margin: -0.5rem -0.75rem;
+  color: var(--color-muted);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition:
+    color 320ms var(--ease-settle),
+    opacity 380ms var(--ease-authored),
+    transform 380ms var(--ease-authored),
+    visibility 0s linear 380ms;
+}
+
+.toggle:hover {
+  color: var(--color-ivory);
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(3px);
+}
+
+.root[data-open] .toggle {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-3px);
+}
+
+.root[data-open] .form {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.input {
+  width: 11rem;
+  appearance: none;
+  border: 0;
+  border-bottom: 1px solid var(--color-hairline);
+  border-radius: 0;
+  background: none;
+  padding: 0 0 0.35rem;
+  color: var(--color-ivory);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  caret-color: var(--color-ivory);
+  transition: border-color 320ms var(--ease-settle);
+}
+
+.input::placeholder {
+  color: var(--color-muted);
+  opacity: 0.75;
+}
+
+.input:focus {
+  outline: none;
+  border-bottom-color: rgb(240 237 230 / 0.45);
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-ivory);
+  -webkit-box-shadow: 0 0 0 100px #000 inset;
+}
+
+.submit {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0.5rem;
+  margin: -0.5rem;
+  color: var(--color-muted);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 320ms var(--ease-settle);
+}
+
+.submit:hover {
+  color: var(--color-ivory);
+}
+
+.done {
+  grid-area: 1 / 1;
+  margin: 0;
+  color: var(--color-ivory);
+  animation: settle 620ms var(--ease-authored) both;
+}
+
+.status {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  margin: 0;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.status:empty {
+  display: none;
+}
+
+/* Visually hidden, still announced. */
+.label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Bot trap — never shown, never focusable. */
+.trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle,
+  .form,
+  .done {
+    transition-duration: 1ms;
+    animation-duration: 1ms;
+  }
+}

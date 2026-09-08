@@ -33,7 +33,22 @@ The brand system in `docs/DESIGN_SYSTEM.md` is binding. Read it before writing U
 | 3D | Three.js / React Three Fiber — scoped to the GH dice interaction, optional and lazy-loaded |
 | Hosting | Vercel |
 
-Nothing is installed yet. This repository is currently structure and documentation only, so the dependency list stays empty until the app is scaffolded.
+Framer Motion, GSAP and R3F are listed for the phases that need them and are deliberately not installed yet — the pre-launch front door runs on CSS transforms and a single `requestAnimationFrame` loop, and nothing else has been built.
+
+---
+
+## Current state — the pre-launch front door
+
+`/` is a coming-soon page and the only route with any UI. It is one viewport, pure black, and the GH dice mark carries it alone.
+
+- **The mark.** The supplied dice artwork, unaltered — cropped to its bounding box and converted to an alpha mask so it composites over `#000000` exactly as delivered. Served as WebP at three widths with a PNG fallback, from `public/brand/`.
+- **Motion.** It emerges out of black over 1.5s (opacity, a 6% scale, a small rise), then drifts on a sum of sines that never visibly repeats. On a fine pointer it tilts toward the cursor through a damped spring — it lags, then settles on its own — and compresses about 1.5% when pressed, with a slight bounce on release. Two transform writes per frame on composited layers; the loop stops in a background tab.
+- **Touch.** No cursor interaction. The drift continues, and `deviceorientation` is used only if the browser gives it without a permission prompt.
+- **Reduced motion.** `prefers-reduced-motion: reduce` replaces the entrance with a plain fade and binds no listeners at all.
+- **Metadata, not navigation.** Wordmark, `IG`, `GH / 2026` and `COMING SOON` sit at the four margins. The middle of the screen belongs to the mark.
+- **Atmosphere.** A masked film grain at 4.5% opacity gathers around the mark. No glow, no shadow, no visible gradient.
+
+Setting `NEXT_PUBLIC_NEWSLETTER_ENDPOINT` reveals a single `GET NOTIFIED` label at the foot of the page, which opens one ruled email field in place and `POST`s `{ email, source }` as JSON. With the variable unset the affordance does not render and the page stays sparse.
 
 ---
 
@@ -70,7 +85,7 @@ cp .env.example .env.local
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical origin. Used for metadata, Open Graph, sitemap, canonical tags. |
 | `NEXT_PUBLIC_GA_ID` | Analytics measurement ID. Absent in development. |
-| `NEXT_PUBLIC_NEWSLETTER_ENDPOINT` | Signup POST endpoint for GH Dispatch. |
+| `NEXT_PUBLIC_NEWSLETTER_ENDPOINT` | Signup POST endpoint for GH Dispatch. Also the switch that reveals the `GET NOTIFIED` capture on `/` — unset, it is not rendered. |
 
 `NEXT_PUBLIC_` variables are exposed to the browser. Any future key that must stay secret gets an unprefixed name and lives only in Vercel project settings.
 
@@ -104,6 +119,12 @@ public/
 styles/                 global CSS, design tokens
 docs/                   design system, architecture, content model, roadmap
 ```
+
+## Brand assets and licensing
+
+`public/brand/gh-dice-*` is derived from the supplied master artwork by cropping and alpha extraction only. Nothing about the mark itself has been redrawn, simplified or recoloured; regenerate from the master rather than editing these files by hand.
+
+`public/fonts/DMMono-Regular.woff2` is DM Mono, © the DM Mono Project Authors, under the SIL Open Font License 1.1 (`public/fonts/OFL.txt`). It carries the metadata role in `DESIGN_SYSTEM.md`; the editorial serif and body sans are still to be chosen.
 
 ---
 
